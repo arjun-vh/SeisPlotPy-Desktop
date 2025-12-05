@@ -45,6 +45,16 @@ pip install SeisPlotPy
 seisplotpy
 ```
 
+> [!IMPORTANT]
+> **Anaconda Users:** If you encounter `ImportError: DLL load failed` errors on Windows, this is due to Qt library conflicts in Anaconda's base environment. Use a standard Python virtual environment instead:
+> ```bash
+> python -m venv seisplotpy_env
+> seisplotpy_env\Scripts\activate
+> pip install SeisPlotPy
+> seisplotpy
+> ```
+> Alternatively, use the standalone `.exe` from [Releases](https://github.com/arjun-vh/SeisPlotPy-Desktop/releases).
+
 **Option 2: Install from Source**
 Requirements: Python 3.10+
 
