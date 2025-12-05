@@ -38,7 +38,14 @@ No Python installation is required.
 2. Download the latest `SeisPlotPy.exe`.
 3. Run the executable directly.
 
-### For Developers (Python)
+### For Developers / Python Users
+**Option 1: Install via PyPI (Recommended)**
+```bash
+pip install SeisPlotPy
+seisplotpy
+```
+
+**Option 2: Install from Source**
 Requirements: Python 3.10+
 
 1. **Clone the repository:**
