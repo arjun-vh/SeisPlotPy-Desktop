@@ -1,77 +1,91 @@
 # SeisPlotPy Desktop
 
-SeisPlotPy Desktop is a fast, lightweight seismic viewer and analysis tool designed for 2D SEG-Y data.  
-It enables interpreters, researchers, and students to load seismic profiles, visualize traces using efficient Qt/pyqtgraph rendering, perform attribute analysis, interactively pick horizons, and export publication-ready images.
+**SeisPlotPy** is a high-performance seismic visualization and analysis tool designed for geophysicists and researchers. Built with **Python 3**, **PyQt6**, and **PyQtGraph**, it offers a fast, interactive environment for viewing and processing 2D SEG-Y data.
 
 ---
 
 ## Key Features
 
-- Load SEG-Y seismic lines (supports 2D single-line SEG-Y)
-- Fast rendering using PyQt6 + PyQtGraph (no lag with thousands of traces)
-- Geometry extraction & cumulative distance calculation
-- Processing tools:
-  - AGC
-  - Bandpass Filtering
-  - Envelope
-  - Phase / Cosine Phase
-  - RMS Amplitude
+### 🚀 High-Performance Visualization
+- **Zero-Lag Rendering**: Visualizes thousands of traces instantly using hardware-accelerated rendering.
+- **Interactive Navigation**: Smooth zooming, panning, and gain control.
+- **Header Inspection**: View text headers (EBCDIC/ASCII) and binary headers.
+
+### 🛠️ Seismic Processing
+- **AGC (Automatic Gain Control)**: Dynamic amplitude balancing.
+- **Bandpass Filter**: Zero-phase filtering with adjustable corner frequencies.
+- **Attribute Analysis**:
+  - Instantaneous Amplitude (Envelope)
+  - Instantaneous Phase & Cosine Phase
   - Instantaneous Frequency
-- Interactive tools:
-  - Zoom / Pan
-  - Trace interval control
-- Horizon Picking & Management:
-  - Add multiple horizons
-  - Lock to trace index or cumulative distance
-  - Export horizons to CSV
-- Export high-quality images (PNG, PDF)
+  - RMS Amplitude
+
+### 📉 Analysis Tools
+- **Horizon Management**: Pick, edit, and export horizons to CSV.
+- **Spectral Analysis**: View frequency spectrum of selected traces.
+- **Quality Control**: Plot trace headers for geometry QC.
+
+### 📤 Export
+- **Publication Ready**: Export plots as high-resolution PDF or PNG.
 
 ---
 
 ## Installation
 
-### Option 1 — Using Python (Developer Install)
+### For Users (Windows Executable)
+No Python installation is required.
+1. Go to the [Releases Page](https://github.com/arjun-vh/SeisPlotPy-Desktop/releases).
+2. Download the latest `SeisPlotPy.exe`.
+3. Run the executable directly.
 
-```sh
-git clone https://github.com/arjun-vh/SeisPlotPy-Desktop.git
-cd SeisPlotPy-Desktop
-pip install -r requirements.txt
-python main.py
-```
+### For Developers (Python)
+Requirements: Python 3.10+
 
-### Option 2 — Standalone Executable (Windows)
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/arjun-vh/SeisPlotPy-Desktop.git
+   cd SeisPlotPy-Desktop
+   ```
 
-A portable .exe version (no Python required) is available under
+2. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Releases:
-https://github.com/arjun-vh/SeisPlotPy-Desktop/releases/latest
+3. **Run the application:**
+   ```bash
+   python main.py
+   ```
 
-Simply download, extract, and run:
+---
 
-## SEG-Y Support Notes
+## Building from Source
 
-- Supported formats: .segy, .sgy
-- Uses segyio backend for data access
-- Assumes 2D single-line SEG-Y
-- Multi-line or 3D cubes currently not supported
+To create the standalone `.exe` yourself:
 
-## Reporting Issues / Feature Requests
+1. Install PyInstaller:
+   ```bash
+   pip install pyinstaller
+   ```
 
-- Found something strange? Want a feature?
-➡️ https://github.com/arjun-vh/SeisPlotPy-Desktop/issues
+2. Run the build command using the included spec file:
+   ```bash
+   python -m PyInstaller --noconfirm --clean SeisPlotPy.spec
+   ```
 
-## Author & Contact
+3. The executable will be generated in the `dist/` directory.
 
-### Developed and maintained by:
-- Arjun V H
-- arjunvelliyidathu@gmail.com
+---
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request for any bugs or feature enhancements.
 
 ## License
 
-- This project is licensed under the GPL License
-- See the LICENSE file for details
+This project is licensed under the **GPL License**. See the [LICENSE](LICENSE) file for details.
 
-## Citation
+## Author
 
-
-If you use SeisPlotPy in your work, please acknowledge the software. Citation format will be added in a future release
+**Arjun V H**  
+📧 arjunvelliyidathu@gmail.com
