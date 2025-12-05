@@ -21,7 +21,7 @@ setup(
     },
     author="Arjun V H",
     author_email="arjunvelliyidathu@gmail.com",
-    description="A high-performance Seismic Interpretation & QC Workstation.",
+    description="A high-performance 2D post-stack Interpretation & QC Workstation.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/arjun-vh/SeisPlotPy",
@@ -32,4 +32,5 @@ setup(
         "Topic :: Scientific/Engineering :: Geophysics"
     ],
     python_requires=">=3.8",
+
 )
