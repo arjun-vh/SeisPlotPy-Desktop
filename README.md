@@ -35,8 +35,8 @@
 ### For Users (Windows Executable)
 No Python installation is required.
 1. Go to the [Releases Page](https://github.com/arjun-vh/SeisPlotPy-Desktop/releases).
-2. Download the latest `SeisPlotPy.exe`.
-3. Run the executable directly.
+2. Download the latest `SeisPlotPy_v1.0.0.zip`.
+3. Extract the zip file and run `SeisPlotPy.exe`.
 
 ### For Developers (Python)
 Requirements: Python 3.10+
