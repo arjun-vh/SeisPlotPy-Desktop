@@ -1,5 +1,6 @@
 import segyio
 import numpy as np
+import traceback
 
 class SeismicDataManager:
     def __init__(self, file_path):
@@ -17,11 +18,15 @@ class SeismicDataManager:
         self._scan_file()
 
     def _scan_file(self):
-        with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
-            self.n_traces = f.tracecount
-            self.n_samples = f.samples.size
-            self.sample_rate = segyio.tools.dt(f) / 1000 
-            self.time_axis = f.samples
+        try:
+            with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
+                self.n_traces = f.tracecount
+                self.n_samples = f.samples.size
+                self.sample_rate = segyio.tools.dt(f) / 1000 
+                self.time_axis = f.samples
+        except Exception:
+            traceback.print_exc()
+            raise
 
     def get_data_slice(self, start_trace, end_trace, step=1):
         """Reads data traces"""
@@ -30,9 +35,13 @@ class SeismicDataManager:
         if start >= end:
             return np.zeros((self.n_samples, 0))
 
-        with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
-            data_chunk = f.trace.raw[start:end:step]
-            return data_chunk.T
+        try:
+            with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
+                data_chunk = f.trace.raw[start:end:step]
+                return data_chunk.T
+        except Exception:
+            traceback.print_exc()
+            return np.zeros((self.n_samples, 0))
 
     def get_header_slice(self, header_name, start_trace, end_trace, step=1):
         """
@@ -45,9 +54,13 @@ class SeismicDataManager:
         start = max(0, start_trace)
         end = min(self.n_traces, end_trace)
 
-        with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
-            all_values = f.attributes(key)[:]
-            return all_values[start:end:step]
+        try:
+            with segyio.open(self.file_path, mode='r', ignore_geometry=True) as f:
+                all_values = f.attributes(key)[:]
+                return all_values[start:end:step]
+        except Exception:
+            traceback.print_exc()
+            return np.arange(start_trace, end_trace, step) # Fallback
 
     def get_text_header(self):
         """Reads and decodes the EBCDIC/ASCII text header properly"""
@@ -87,4 +100,5 @@ class SeismicDataManager:
                 return text_str
                 
         except Exception as e:
+            traceback.print_exc()
             return f"Error reading text header: {e}"

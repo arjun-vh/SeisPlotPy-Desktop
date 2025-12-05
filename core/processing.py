@@ -4,16 +4,25 @@ from scipy.signal import butter, filtfilt, hilbert
 class SeismicProcessing:
     @staticmethod
     def apply_scalar(values, scalars):
-        if scalars is None: return values.astype(float)
-        s = scalars.astype(float); s[s == 0] = 1.0
+        if scalars is None:
+            return values.astype(float)
+        
+        s = scalars.astype(float)
+        s[s == 0] = 1.0
+        
         res = values.astype(float)
-        pos_mask = s > 0; res[pos_mask] *= s[pos_mask]
-        neg_mask = s < 0; res[neg_mask] /= np.abs(s[neg_mask])
+        pos_mask = s > 0
+        res[pos_mask] *= s[pos_mask]
+        
+        neg_mask = s < 0
+        res[neg_mask] /= np.abs(s[neg_mask])
+        
         return res
 
     @staticmethod
     def calculate_cumulative_distance(x, y):
-        dx = np.diff(x); dy = np.diff(y)
+        dx = np.diff(x)
+        dy = np.diff(y)
         dist = np.sqrt(dx**2 + dy**2)
         return np.concatenate(([0], np.cumsum(dist)))
 
@@ -21,23 +30,32 @@ class SeismicProcessing:
     def apply_agc(data, sample_rate_ms, window_ms=500):
         epsilon = 1e-10
         window_len = int(window_ms / sample_rate_ms)
-        if window_len % 2 == 0: window_len += 1
+        if window_len % 2 == 0:
+            window_len += 1
+            
         squared = data ** 2
         window = np.ones(window_len) / window_len
         n_samples, n_traces = data.shape
         data_agc = np.zeros_like(data)
+        
         for i in range(n_traces):
             trace_sq = squared[:, i]
             rms_env = np.sqrt(np.convolve(trace_sq, window, mode='same'))
             data_agc[:, i] = data[:, i] / (rms_env + epsilon)
+            
         return data_agc
 
     @staticmethod
     def apply_bandpass(data, sample_rate_ms, lowcut, highcut, order=4):
         nyq = 0.5 * (1000.0 / sample_rate_ms)
-        low = lowcut / nyq; high = highcut / nyq
-        if low <= 0: low = 0.001
-        if high >= 1: high = 0.99
+        low = lowcut / nyq
+        high = highcut / nyq
+        
+        if low <= 0:
+            low = 0.001
+        if high >= 1:
+            high = 0.99
+            
         b, a = butter(order, [low, high], btype='band')
         return filtfilt(b, a, data, axis=0)
     
@@ -89,10 +107,14 @@ class SeismicProcessing:
     def attribute_rms(data, sample_rate_ms, window_ms=100):
         """Root Mean Square Amplitude"""
         window_len = int(window_ms / sample_rate_ms)
-        if window_len % 2 == 0: window_len += 1
+        if window_len % 2 == 0:
+            window_len += 1
+            
         squared = data ** 2
         window = np.ones(window_len) / window_len
         rms = np.zeros_like(data)
+        
         for i in range(data.shape[1]):
             rms[:, i] = np.sqrt(np.convolve(squared[:, i], window, mode='same'))
+            
         return rms

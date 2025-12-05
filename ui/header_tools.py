@@ -126,9 +126,14 @@ class HeaderExportDialog(QDialog):
         
         # Quick Select Buttons
         btn_box = QHBoxLayout()
-        btn_all = QPushButton("Select All"); btn_all.clicked.connect(self.sel_all)
-        btn_none = QPushButton("Select None"); btn_none.clicked.connect(self.sel_none)
-        btn_box.addWidget(btn_all); btn_box.addWidget(btn_none)
+        btn_all = QPushButton("Select All")
+        btn_all.clicked.connect(self.sel_all)
+        
+        btn_none = QPushButton("Select None")
+        btn_none.clicked.connect(self.sel_none)
+        
+        btn_box.addWidget(btn_all)
+        btn_box.addWidget(btn_none)
         layout.addLayout(btn_box)
         
         # OK/Cancel

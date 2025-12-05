@@ -29,9 +29,14 @@ class HorizonManager(QDialog):
         
         # Toolbar
         btn_layout = QHBoxLayout()
-        self.btn_new = QPushButton("+ New Horizon"); self.btn_new.clicked.connect(self.create_horizon)
-        self.btn_import = QPushButton("Import CSV"); self.btn_import.clicked.connect(self.import_horizon)
-        btn_layout.addWidget(self.btn_new); btn_layout.addWidget(self.btn_import)
+        self.btn_new = QPushButton("+ New Horizon")
+        self.btn_new.clicked.connect(self.create_horizon)
+        
+        self.btn_import = QPushButton("Import CSV")
+        self.btn_import.clicked.connect(self.import_horizon)
+        
+        btn_layout.addWidget(self.btn_new)
+        btn_layout.addWidget(self.btn_import)
         layout.addLayout(btn_layout)
         
         # Table
@@ -66,39 +71,68 @@ class HorizonManager(QDialog):
         count = len(self.horizons) + 1
         colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#00FFFF', '#FF00FF']
         color = colors[len(self.horizons) % len(colors)]
-        self.horizons.append({'name': f"Horizon_{count}", 'color': color, 'points': [], 'visible': True})
-        self.refresh_table(); self.set_active_horizon(len(self.horizons)-1)
+        
+        self.horizons.append({
+            'name': f"Horizon_{count}", 
+            'color': color, 
+            'points': [], 
+            'visible': True
+        })
+        
+        self.refresh_table()
+        self.set_active_horizon(len(self.horizons)-1)
 
     def import_horizon(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Import CSV", "", "CSV (*.csv *.txt)")
-        if not file_path: return
+        if not file_path:
+            return
+            
         try:
             df = pd.read_csv(file_path, header=None, skiprows=1, usecols=[0, 1])
             points = list(zip(df[0], df[1]))
             name = os.path.basename(file_path).split('.')[0]
+            
             colors = ['#FF0000', '#00FF00', '#0000FF']
             color = colors[len(self.horizons) % len(colors)]
-            self.horizons.append({'name': name, 'color': color, 'points': points, 'visible': True})
-            self.refresh_table(); self.horizon_visibility_changed.emit()
-        except Exception as e: QMessageBox.critical(self, "Error", str(e))
+            
+            self.horizons.append({
+                'name': name, 
+                'color': color, 
+                'points': points, 
+                'visible': True
+            })
+            
+            self.refresh_table()
+            self.horizon_visibility_changed.emit()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", str(e))
 
     def refresh_table(self):
         self.table.setRowCount(len(self.horizons))
-        for btn in self.pick_group.buttons(): self.pick_group.removeButton(btn)
+        for btn in self.pick_group.buttons():
+            self.pick_group.removeButton(btn)
         
         for i, h in enumerate(self.horizons):
             # Radio Button
-            rb = QRadioButton(); rb.setChecked(i == self.active_horizon_index)
+            rb = QRadioButton()
+            rb.setChecked(i == self.active_horizon_index)
             rb.toggled.connect(lambda c, idx=i: self.set_active_horizon(idx) if c else None)
             self.pick_group.addButton(rb)
-            widget_rb = QWidget(); l = QHBoxLayout(widget_rb); l.addWidget(rb); l.setAlignment(Qt.AlignmentFlag.AlignCenter); l.setContentsMargins(0,0,0,0)
+            
+            widget_rb = QWidget()
+            l = QHBoxLayout(widget_rb)
+            l.addWidget(rb)
+            l.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            l.setContentsMargins(0,0,0,0)
             self.table.setCellWidget(i, 0, widget_rb)
             
             # Name (Editable)
             self.table.setItem(i, 1, QTableWidgetItem(h['name']))
             
             # Color
-            btn_col = QPushButton(); btn_col.setStyleSheet(f"background-color: {h['color']}; border: none;")
+            btn_col = QPushButton()
+            btn_col.setStyleSheet(f"background-color: {h['color']}; border: none;")
             btn_col.clicked.connect(lambda _, idx=i: self.change_color(idx))
             self.table.setCellWidget(i, 2, btn_col)
             
@@ -108,7 +142,8 @@ class HorizonManager(QDialog):
             self.table.setItem(i, 3, item_pts)
             
             # Delete
-            btn_del = QPushButton("X"); btn_del.setStyleSheet("color: red; font-weight: bold;")
+            btn_del = QPushButton("X")
+            btn_del.setStyleSheet("color: red; font-weight: bold;")
             btn_del.clicked.connect(lambda _, idx=i: self.delete_horizon(idx))
             self.table.setCellWidget(i, 4, btn_del)
             
@@ -118,22 +153,34 @@ class HorizonManager(QDialog):
         self.active_horizon_index = index
         if self.is_picking:
             name = self.horizons[index]['name']
-            self.lbl_status.setText(f"Status: Picking on {name}"); self.picking_toggled.emit(True, name)
+            self.lbl_status.setText(f"Status: Picking on {name}")
+            self.picking_toggled.emit(True, name)
 
     def toggle_picking(self, checked):
         self.is_picking = checked
-        if self.active_horizon_index == -1: self.is_picking = False; self.btn_pick.setChecked(False); return
+        if self.active_horizon_index == -1:
+            self.is_picking = False
+            self.btn_pick.setChecked(False)
+            return
+            
         name = self.horizons[self.active_horizon_index]['name']
         if self.is_picking:
-            self.btn_pick.setText("Stop Picking"); self.btn_pick.setStyleSheet("background-color: #ffcccc; color: red; font-weight: bold;")
-            self.lbl_status.setText(f"Status: Picking on {name}"); self.lbl_status.setStyleSheet("font-weight: bold; color: red;")
+            self.btn_pick.setText("Stop Picking")
+            self.btn_pick.setStyleSheet("background-color: #ffcccc; color: red; font-weight: bold;")
+            self.lbl_status.setText(f"Status: Picking on {name}")
+            self.lbl_status.setStyleSheet("font-weight: bold; color: red;")
         else:
-            self.btn_pick.setText("Start Picking"); self.btn_pick.setStyleSheet("background-color: #e0e0e0;")
-            self.lbl_status.setText("Status: Viewing Mode"); self.lbl_status.setStyleSheet("font-weight: bold; color: gray;")
+            self.btn_pick.setText("Start Picking")
+            self.btn_pick.setStyleSheet("background-color: #e0e0e0;")
+            self.lbl_status.setText("Status: Viewing Mode")
+            self.lbl_status.setStyleSheet("font-weight: bold; color: gray;")
+            
         self.picking_toggled.emit(self.is_picking, name)
 
     def add_point(self, x, y):
-        if self.active_horizon_index == -1: return
+        if self.active_horizon_index == -1:
+            return
+            
         # x is Trace Index, y is Time/Depth
         self.horizons[self.active_horizon_index]['points'].append((x, y))
         self.horizons[self.active_horizon_index]['points'].sort(key=lambda p: p[0])
@@ -154,10 +201,12 @@ class HorizonManager(QDialog):
         tolerance_x: +/- Trace Index
         tolerance_y: +/- Time units (ms or m)
         """
-        if self.active_horizon_index == -1: return
+        if self.active_horizon_index == -1:
+            return
         
         points = self.horizons[self.active_horizon_index]['points']
-        if not points: return
+        if not points:
+            return
         
         # Find points within the tolerance box
         # Look for the closest one
@@ -184,12 +233,22 @@ class HorizonManager(QDialog):
 
     def change_color(self, index):
         col = QColorDialog.getColor(QColor(self.horizons[index]['color']))
-        if col.isValid(): self.horizons[index]['color'] = col.name(); self.refresh_table(); self.horizon_color_changed.emit()
+        if col.isValid():
+            self.horizons[index]['color'] = col.name()
+            self.refresh_table()
+            self.horizon_color_changed.emit()
 
     def delete_horizon(self, index):
-        if index == self.active_horizon_index: self.toggle_picking(False); self.active_horizon_index = -1
-        del self.horizons[index]; self.refresh_table(); self.horizon_removed.emit()
+        if index == self.active_horizon_index:
+            self.toggle_picking(False)
+            self.active_horizon_index = -1
+            
+        del self.horizons[index]
+        self.refresh_table()
+        self.horizon_removed.emit()
 
     def request_export(self):
-        if self.active_horizon_index != -1: self.export_requested.emit(self.active_horizon_index)
-        else: QMessageBox.warning(self, "Warning", "No horizon selected.")
+        if self.active_horizon_index != -1:
+            self.export_requested.emit(self.active_horizon_index)
+        else:
+            QMessageBox.warning(self, "Warning", "No horizon selected.")

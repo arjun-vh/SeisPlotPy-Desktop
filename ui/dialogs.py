@@ -41,16 +41,24 @@ class GeometryDialog(QDialog):
         layout.addWidget(QLabel("X Coordinate:"))
         self.combo_x = QComboBox()
         self.combo_x.addItems(headers)
-        if 'CDP_X' in headers: self.combo_x.setCurrentText('CDP_X')
-        elif 'SourceX' in headers: self.combo_x.setCurrentText('SourceX')
+        
+        if 'CDP_X' in headers:
+            self.combo_x.setCurrentText('CDP_X')
+        elif 'SourceX' in headers:
+            self.combo_x.setCurrentText('SourceX')
+            
         layout.addWidget(self.combo_x)
         
         # Y Coord
         layout.addWidget(QLabel("Y Coordinate:"))
         self.combo_y = QComboBox()
         self.combo_y.addItems(headers)
-        if 'CDP_Y' in headers: self.combo_y.setCurrentText('CDP_Y')
-        elif 'SourceY' in headers: self.combo_y.setCurrentText('SourceY')
+        
+        if 'CDP_Y' in headers:
+            self.combo_y.setCurrentText('CDP_Y')
+        elif 'SourceY' in headers:
+            self.combo_y.setCurrentText('SourceY')
+            
         layout.addWidget(self.combo_y)
         
         layout.addSpacing(10)
@@ -67,7 +75,10 @@ class GeometryDialog(QDialog):
         
         self.combo_scalar = QComboBox()
         self.combo_scalar.addItems(headers)
-        if 'SourceGroupScalar' in headers: self.combo_scalar.setCurrentText('SourceGroupScalar')
+        
+        if 'SourceGroupScalar' in headers:
+            self.combo_scalar.setCurrentText('SourceGroupScalar')
+            
         layout.addWidget(self.combo_scalar)
         
         # Option 2: Manual
