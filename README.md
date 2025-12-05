@@ -24,7 +24,7 @@ It enables interpreters, researchers, and students to load seismic profiles, vis
   - Add multiple horizons
   - Lock to trace index or cumulative distance
   - Export horizons to CSV
-- Export high-quality images (PNG, JPG, PDF)
+- Export high-quality images (PNG, PDF)
 
 ---
 
@@ -72,5 +72,6 @@ Simply download, extract, and run:
 - See the LICENSE file for details
 
 ## Citation
+
 
 If you use SeisPlotPy in your work, please acknowledge the software. Citation format will be added in a future release
