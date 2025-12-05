@@ -1,40 +1,35 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jul 28 17:03:42 2025
-
-@author: Arjun
-"""
-
 from setuptools import setup, find_packages
 
 setup(
     name="SeisPlotPy",
-    version="0.2.0",  # Updated version
-    py_modules=["seisplotpy"],
+    version="1.0.0",
+    packages=find_packages(), 
+    include_package_data=True,
     install_requires=[
+        "PyQt6>=6.4.0",
+        "pyqtgraph>=0.13.0",
         "segyio>=1.9.0",
         "numpy>=1.21.0",
         "matplotlib>=3.5.0",
         "pandas>=1.3.0",
+        "scipy>=1.10.0"
     ],
     entry_points={
         "console_scripts": [
-            "seisplotpy=seisplotpy:SeismicViewerApp.main"
+            "seisplotpy=main:main" 
         ]
     },
     author="Arjun V H",
-    author_email="arjunvelliyidathu@gmail.com",  # Updated email
-    description="A GUI tool to view and export SEG-Y seismic data.",
+    author_email="arjunvelliyidathu@gmail.com",
+    description="A high-performance Seismic Interpretation & QC Workstation.",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     url="https://github.com/arjun-vh/SeisPlotPy",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GPL License",
         "Operating System :: OS Independent",
+        "Topic :: Scientific/Engineering :: Geophysics"
     ],
-    python_requires=">=3.7",
-    package_data={
-        "": ["seisplotpy.ico"]  # Include icon file
-    },
+    python_requires=">=3.8",
 )
